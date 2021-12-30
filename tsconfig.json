@@ -17,7 +17,8 @@
     "lib": [
       "es6",
     ],
-    "strict": true
+    "strict": true,
+    "noUnusedParameters": true,
   },
   "include": [
     "src/**/*",
