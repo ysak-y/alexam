@@ -1,0 +1,10 @@
+{
+  "name": "alexam",
+  "version": "0.0.1",
+  "description": "Simulate Alexa interaction for testing and debugging",
+  "main": "index.js",
+  "repository": "git@github.com:ysak-y/alexam.git",
+  "author": "yoshiaki-yamada <yoshiaki.0614@gmail.com>",
+  "license": "MIT",
+  "private": false
+}
