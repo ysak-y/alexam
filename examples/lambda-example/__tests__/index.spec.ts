@@ -1,6 +1,10 @@
-import { Alexam, AlexamBuilder, SkillRequestFactory } from "alexam";
+import {
+  Alexam,
+  AlexamBuilder,
+  SkillRequestFactory,
+  LambdaHandler,
+} from "alexam";
 import { handler } from "../src";
-import { LambdaHandler } from "alexam/lib/AlexamBuilder";
 import { ui } from "ask-sdk-model";
 
 const requestFactory = new SkillRequestFactory("en-US");

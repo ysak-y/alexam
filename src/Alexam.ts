@@ -1,10 +1,10 @@
-import { Handler } from "./AlexamBuilder";
+import { Handler } from "./Handler";
 import { RequestEnvelope } from "ask-sdk-model";
 
 export class Alexam {
   handler: Handler;
 
-  constructor(handler: any) {
+  constructor(handler: Handler) {
     this.handler = handler;
   }
 
