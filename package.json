@@ -7,6 +7,9 @@
   "author": "yoshiaki-yamada <yoshiaki.0614@gmail.com>",
   "license": "MIT",
   "private": false,
+  "scripts": {
+    "build": "tsc"
+  },
   "devDependencies": {
     "@types/jest": "^27.0.3",
     "@types/node": "^17.0.5",
