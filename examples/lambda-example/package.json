@@ -1,0 +1,20 @@
+{
+  "name": "lambda-example",
+  "version": "0.0.1",
+  "description": "Example project of test suites with alexam",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "ask-sdk": "^2.11.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.16.5",
+    "@babel/preset-env": "^7.16.5",
+    "@babel/preset-typescript": "^7.16.5",
+    "@types/jest": "^27.0.3",
+    "alexam": "file:../../",
+    "babel-jest": "^27.4.5",
+    "jest": "^27.4.5"
+  }
+}
