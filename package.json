@@ -2,19 +2,29 @@
   "name": "alexam",
   "version": "0.0.1",
   "description": "Simulate Alexa interaction for testing and debugging",
-  "main": "index.js",
+  "main": "lib/index.js",
   "repository": "git@github.com:ysak-y/alexam.git",
   "author": "yoshiaki-yamada <yoshiaki.0614@gmail.com>",
   "license": "MIT",
   "private": false,
+  "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc"
   },
   "devDependencies": {
+    "@babel/core": "^7.16.5",
+    "@babel/preset-env": "^7.16.5",
+    "@babel/preset-typescript": "^7.16.5",
     "@types/jest": "^27.0.3",
     "@types/node": "^17.0.5",
+    "@types/uuid": "^8.3.3",
+    "ask-sdk-model": "^1.37.1",
+    "babel-jest": "^27.4.5",
     "jest": "^27.4.5",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.4"
+  },
+  "dependencies": {
+    "uuid": "^8.3.2"
   }
 }
