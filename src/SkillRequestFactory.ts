@@ -3,6 +3,7 @@ import { Context } from "./skillRequest/Context";
 import { User } from "./skillRequest/User";
 import { Session } from "./skillRequest/Session";
 import { RequestEnvelope } from "ask-sdk-model";
+import { IntentRequest } from "./SkillRequest";
 
 export class SkillRequestFactory {
   user: User;
@@ -26,6 +27,37 @@ export class SkillRequestFactory {
         ...this.requestBase(),
       })
       .getRequest();
+  }
+
+  // Does not support Dialog interface
+  intentRequest(
+    intentName: string,
+    slots?: { [slotName: string]: any },
+  ): RequestEnvelope {
+    const intentRequestPayload: IntentRequest = {
+      type: "IntentRequest",
+      intent: {
+        name: intentName,
+      },
+      ...this.requestBase,
+    };
+
+    if (slots) {
+      const slotsPayload: { [slotName: string]: any } = {};
+      Object.keys(slots).forEach(slotName => {
+        slotsPayload[slotName] = {
+          name: slotName,
+          value: slots[slotName],
+          slotValue: {
+            value: slots[slotName],
+          },
+        };
+      });
+
+      intentRequestPayload.slots = slotsPayload;
+    }
+
+    return this.withSession().withRequest(intentRequestPayload).getRequest();
   }
 
   withSession() {
