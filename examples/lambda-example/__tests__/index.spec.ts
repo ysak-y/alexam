@@ -3,7 +3,7 @@ import {
   AlexamBuilder,
   SkillRequestFactory,
   LambdaHandler,
-} from "alexam";
+} from "../../../lib/";
 import { handler } from "../src";
 import { ui } from "ask-sdk-model";
 

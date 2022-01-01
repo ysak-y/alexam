@@ -13,7 +13,6 @@
     "@babel/preset-env": "^7.16.5",
     "@babel/preset-typescript": "^7.16.5",
     "@types/jest": "^27.0.3",
-    "alexam": "file:../../",
     "babel-jest": "^27.4.5",
     "jest": "^27.4.5"
   }
