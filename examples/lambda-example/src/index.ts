@@ -25,9 +25,30 @@ const HelloWorldIntentHandler: RequestHandler = {
   },
 };
 
+const CountUpIntentHandler: RequestHandler = {
+  canHandle(handlerInput: HandlerInput): boolean {
+    return (
+      handlerInput.requestEnvelope.request.type === "IntentRequest" &&
+      handlerInput.requestEnvelope.request.intent.name === "CountUpIntent"
+    );
+  },
+  handle(handlerInput: HandlerInput) {
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
+    attributes.count = attributes.count ? attributes.count + 1 : 1;
+
+    handlerInput.attributesManager.setSessionAttributes(attributes);
+
+    return handlerInput.responseBuilder.getResponse();
+  },
+};
+
 export const handler = async (event, context) => {
   const skill = SkillBuilders.custom()
-    .addRequestHandlers(LaunchRequestHandler, HelloWorldIntentHandler)
+    .addRequestHandlers(
+      LaunchRequestHandler,
+      HelloWorldIntentHandler,
+      CountUpIntentHandler,
+    )
     .create();
 
   return skill.invoke(event, context);

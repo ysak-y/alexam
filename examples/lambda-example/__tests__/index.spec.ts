@@ -29,4 +29,22 @@ describe("Launch", () => {
       );
     });
   });
+
+  test("Retain session attributes", async () => {
+    expect.assertions(1);
+    const handlerObj = new LambdaHandler(handler);
+    const alexam: Alexam = new AlexamBuilder().setHandler(handlerObj).build();
+    const requestFactory = alexam.requestFactory;
+    const countUpIntent = requestFactory.intentRequest("CountUpIntent");
+
+    return alexam
+      .send(countUpIntent)
+      .then(() => {
+        const countUpIntent2 = requestFactory.intentRequest("CountUpIntent");
+        return alexam.send(countUpIntent2);
+      })
+      .then(res => {
+        expect(res.sessionAttributes?.count).toBe(2);
+      });
+  });
 });
