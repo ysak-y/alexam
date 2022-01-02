@@ -15,8 +15,6 @@ export class AlexamBuilder {
     return this;
   }
 
-  setInteractionModel() {}
-
   build(): Alexam {
     if (!this._handler)
       throw new Error("You must set handler with setHandler!");

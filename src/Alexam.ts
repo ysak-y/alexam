@@ -11,8 +11,6 @@ export class Alexam {
     this.requestFactory = requestFactory;
   }
 
-  //async utter(text: string) {}
-
   async send(request: RequestEnvelope) {
     const resp = await this.handler.handle(request);
     const attributes = resp.sessionAttributes;
