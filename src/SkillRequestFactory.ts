@@ -9,12 +9,13 @@ export class SkillRequestFactory {
   user: User;
   applicationId: string = "amzn1.ask.skill." + uuid.v4();
   locale: string;
-  session: Session = new Session(this.applicationId);
+  session: Session;
   context: Context;
   private _request: any;
 
-  constructor(locale: string, user?: User) {
+  constructor(locale: string, session?: Session, user?: User) {
     this.locale = locale;
+    this.session = session ? session : new Session(this.applicationId);
     this.user = user ? user : new User();
     this.context = new Context(this.applicationId, this.user);
     this._request = this.requestEnvelopeBase();
