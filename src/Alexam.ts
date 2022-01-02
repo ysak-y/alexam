@@ -1,5 +1,5 @@
 import { Handler } from "./Handler";
-import { RequestEnvelope } from "ask-sdk-model";
+import { RequestEnvelope, ResponseEnvelope } from "ask-sdk-model";
 import { SkillRequestFactory } from ".";
 
 export class Alexam {
@@ -13,10 +13,15 @@ export class Alexam {
 
   async send(request: RequestEnvelope) {
     const resp = await this.handler.handle(request);
-    const attributes = resp.sessionAttributes;
+    this.updateSession(resp);
+    return resp;
+  }
+
+  updateSession(response: ResponseEnvelope) {
+    this.requestFactory.session.new = false;
+    const attributes = response.sessionAttributes;
     if (attributes) {
       this.requestFactory.session.attributes = attributes;
     }
-    return resp;
   }
 }
