@@ -46,3 +46,22 @@ test("Retain session attributes", async () => {
       expect(res.sessionAttributes?.count).toBe(2);
     });
 });
+
+test("Simulate request from display device", async () => {
+  expect.assertions(1);
+  const handlerObj = new LambdaHandler(handler);
+  const alexam: Alexam = new AlexamBuilder()
+    .setHandler(handlerObj)
+    .setDisplay()
+    .build();
+  const requestFactory = alexam.requestFactory;
+  const displayDeviceIntent = requestFactory.intentRequest(
+    "DisplayDeviceIntent",
+  );
+
+  return alexam.send(displayDeviceIntent).then(res => {
+    expect((res.response.outputSpeech as ui.SsmlOutputSpeech).ssml).toMatch(
+      "Request from display device",
+    );
+  });
+});

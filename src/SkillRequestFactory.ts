@@ -6,18 +6,18 @@ import { RequestEnvelope } from "ask-sdk-model";
 import { IntentRequest } from "./SkillRequest";
 
 export class SkillRequestFactory {
-  user: User;
   applicationId: string = "amzn1.ask.skill." + uuid.v4();
   locale: string;
   session: Session;
   context: Context;
   private _request: any;
 
-  constructor(locale: string, session?: Session, user?: User) {
+  constructor(locale: string, session?: Session, context?: Context) {
     this.locale = locale;
     this.session = session ? session : new Session(this.applicationId);
-    this.user = user ? user : new User();
-    this.context = new Context(this.applicationId, this.user);
+    this.context = context
+      ? context
+      : new Context(this.applicationId, new User());
     this._request = this.requestEnvelopeBase();
   }
 

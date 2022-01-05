@@ -42,12 +42,31 @@ const CountUpIntentHandler: RequestHandler = {
   },
 };
 
+const DisplayDeviceIntent: RequestHandler = {
+  canHandle(handlerInput: HandlerInput): boolean {
+    return !!(
+      handlerInput.requestEnvelope.request.type === "IntentRequest" &&
+      handlerInput.requestEnvelope.request.intent.name ===
+        "DisplayDeviceIntent" &&
+      handlerInput.requestEnvelope.context.System.device.supportedInterfaces[
+        "Alexa.Presentation.APL"
+      ]
+    );
+  },
+  handle(handlerInput: HandlerInput) {
+    return handlerInput.responseBuilder
+      .speak("Request from display device")
+      .getResponse();
+  },
+};
+
 export const handler = async (event, context) => {
   const skill = SkillBuilders.custom()
     .addRequestHandlers(
       LaunchRequestHandler,
       HelloWorldIntentHandler,
       CountUpIntentHandler,
+      DisplayDeviceIntent,
     )
     .create();
 

@@ -1,9 +1,10 @@
 import { SkillRequestFactory } from "./SkillRequestFactory";
 import { Alexam } from "./Alexam";
 import { Handler } from "./Handler";
+import { interfaces } from "ask-sdk-model";
 
 export class AlexamBuilder {
-  skillRequestFactory?: SkillRequestFactory;
+  skillRequestFactory: SkillRequestFactory = new SkillRequestFactory("en-US");
   private _handler?: Handler;
 
   setSkillRequestFactory(skillRequestFactory: SkillRequestFactory) {
@@ -15,14 +16,16 @@ export class AlexamBuilder {
     return this;
   }
 
+  setDisplay(viewport: interfaces.viewport.ViewportState = {}) {
+    this.skillRequestFactory.context.device.aplSupported();
+    this.skillRequestFactory.context.viewport = viewport;
+    return this;
+  }
+
   build(): Alexam {
     if (!this._handler)
       throw new Error("You must set handler with setHandler!");
 
-    const skillRequestFactory = this.skillRequestFactory
-      ? this.skillRequestFactory
-      : new SkillRequestFactory("en-US");
-
-    return new Alexam(this._handler, skillRequestFactory);
+    return new Alexam(this._handler, this.skillRequestFactory);
   }
 }

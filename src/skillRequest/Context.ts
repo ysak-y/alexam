@@ -1,3 +1,4 @@
+import { interfaces } from "ask-sdk-model";
 import * as uuid from "uuid";
 import { Device } from "./Device";
 import { User } from "./User";
@@ -7,6 +8,7 @@ export class Context {
   apiEndpoint: string = "https://api.amazonalexa.com";
   applicationId: string;
   device: Device = new Device();
+  viewport?: interfaces.viewport.ViewportState;
   user: User;
 
   constructor(applicationId: string, user: User) {
@@ -15,7 +17,7 @@ export class Context {
   }
 
   toJson() {
-    return {
+    const json: any = {
       System: {
         application: {
           applicationId: this.applicationId,
@@ -33,5 +35,11 @@ export class Context {
         apiAccessToken: this.apiAccessToken,
       },
     };
+
+    if (this.viewport) {
+      json.Viewport = this.viewport;
+    }
+
+    return json;
   }
 }

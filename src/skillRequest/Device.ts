@@ -4,34 +4,31 @@ export class Device {
   id: string = "deviceID." + uuid.v4();
   private _supportedInterfaces: any = {};
 
-  public constructor() {
-    this.audioPlayerSupported(true);
+  constructor() {
+    this.audioPlayerSupported();
   }
 
-  public audioPlayerSupported(value?: boolean): boolean {
-    return this.supportedInterface("AudioPlayer", value);
+  audioPlayerSupported(obj: { [name: string]: any } = {}) {
+    this.supportedInterface("AudioPlayer", obj);
   }
 
-  public displaySupported(value?: boolean): boolean {
-    return this.supportedInterface("Display", value);
+  aplSupported(maxVersion?: string) {
+    this.supportedInterface("Alexa.Presentation.APL", {
+      runtime: {
+        maxVersion: maxVersion ? maxVersion : "1.9",
+      },
+    });
   }
 
-  public videoAppSupported(value?: boolean) {
-    return this.supportedInterface("VideoApp", value);
+  videoAppSupported(obj: { [name: string]: any } = {}) {
+    this.supportedInterface("VideoApp", obj);
   }
 
-  public supportedInterfaces(): any {
+  supportedInterfaces(): any {
     return this._supportedInterfaces;
   }
 
-  private supportedInterface(name: string, value?: boolean): boolean {
-    if (value !== undefined) {
-      if (value === true) {
-        this._supportedInterfaces[name] = {};
-      } else {
-        delete this._supportedInterfaces[name];
-      }
-    }
-    return this._supportedInterfaces[name] !== undefined;
+  private supportedInterface(name: string, obj: { [name: string]: any }) {
+    this._supportedInterfaces[name] = obj;
   }
 }
