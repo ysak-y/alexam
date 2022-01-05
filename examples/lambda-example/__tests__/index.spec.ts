@@ -65,3 +65,20 @@ test("Simulate request from display device", async () => {
     );
   });
 });
+
+test("Simulate request of Alexa.Presentation.APL.UserEvent", async () => {
+  expect.assertions(1);
+  const handlerObj = new LambdaHandler(handler);
+  const alexam: Alexam = new AlexamBuilder()
+    .setHandler(handlerObj)
+    .setDisplay()
+    .build();
+  const requestFactory = alexam.requestFactory;
+  const aplUserEventRequest = requestFactory.aplUserEventRequest({});
+
+  return alexam.send(aplUserEventRequest).then(res => {
+    expect((res.response.outputSpeech as ui.SsmlOutputSpeech).ssml).toMatch(
+      "Request from UserEvent",
+    );
+  });
+});

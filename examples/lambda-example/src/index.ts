@@ -60,6 +60,23 @@ const DisplayDeviceIntent: RequestHandler = {
   },
 };
 
+const DisplayDeviceSendEventIntent: RequestHandler = {
+  canHandle(handlerInput: HandlerInput): boolean {
+    return !!(
+      handlerInput.requestEnvelope.request.type ===
+        "Alexa.Presentation.APL.UserEvent" &&
+      handlerInput.requestEnvelope.context.System.device.supportedInterfaces[
+        "Alexa.Presentation.APL"
+      ]
+    );
+  },
+  handle(handlerInput: HandlerInput) {
+    return handlerInput.responseBuilder
+      .speak("Request from UserEvent")
+      .getResponse();
+  },
+};
+
 export const handler = async (event, context) => {
   const skill = SkillBuilders.custom()
     .addRequestHandlers(
@@ -67,6 +84,7 @@ export const handler = async (event, context) => {
       HelloWorldIntentHandler,
       CountUpIntentHandler,
       DisplayDeviceIntent,
+      DisplayDeviceSendEventIntent,
     )
     .create();
 

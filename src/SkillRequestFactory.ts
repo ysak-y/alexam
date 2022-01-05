@@ -61,6 +61,30 @@ export class SkillRequestFactory {
     return this.withSession().withRequest(intentRequestPayload).getRequest();
   }
 
+  aplUserEventRequest({
+    token,
+    // 'arguments' is reserved by JavaScript...
+    eventArguments,
+    source,
+    components,
+  }: {
+    token?: string;
+    eventArguments?: [any];
+    source?: any;
+    components?: any;
+  }) {
+    return this.withSession()
+      .withRequest({
+        type: "Alexa.Presentation.APL.UserEvent",
+        token,
+        arguments: eventArguments,
+        source,
+        components,
+        ...this.requestBase(),
+      })
+      .getRequest();
+  }
+
   withSession() {
     this._request.session = this.session.toJson();
     return this;
