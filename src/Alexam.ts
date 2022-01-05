@@ -1,6 +1,7 @@
 import { Handler } from "./Handler";
 import { RequestEnvelope, ResponseEnvelope } from "ask-sdk-model";
 import { SkillRequestFactory } from ".";
+import { Session } from "./skillRequest/Session";
 
 export class Alexam {
   handler: Handler;
@@ -23,5 +24,11 @@ export class Alexam {
     if (attributes) {
       this.requestFactory.session.attributes = attributes;
     }
+  }
+
+  resetSession() {
+    this.requestFactory.session = new Session(
+      this.requestFactory.applicationId
+    )
   }
 }

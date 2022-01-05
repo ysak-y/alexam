@@ -29,3 +29,14 @@ test("Update new property of session to false", async () => {
   await alexam.send(launchRequest);
   expect(alexam.requestFactory.session.new).toBe(false);
 });
+
+test("Reset session", async () => {
+  const alexam = new AlexamBuilder()
+    .setHandler(new LambdaHandler(handler))
+    .build();
+  const launchRequest = alexam.requestFactory.launchRequest();
+  await alexam.send(launchRequest);
+  expect(alexam.requestFactory.session.new).toBe(false);
+  alexam.resetSession();
+  expect(alexam.requestFactory.session.new).toBe(true);
+});
