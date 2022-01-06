@@ -48,7 +48,7 @@ const DisplayDeviceIntent: RequestHandler = {
       handlerInput.requestEnvelope.request.type === "IntentRequest" &&
       handlerInput.requestEnvelope.request.intent.name ===
         "DisplayDeviceIntent" &&
-      handlerInput.requestEnvelope.context.System.device.supportedInterfaces[
+      handlerInput.requestEnvelope.context.System.device?.supportedInterfaces[
         "Alexa.Presentation.APL"
       ]
     );
@@ -65,7 +65,7 @@ const DisplayDeviceSendEventIntent: RequestHandler = {
     return !!(
       handlerInput.requestEnvelope.request.type ===
         "Alexa.Presentation.APL.UserEvent" &&
-      handlerInput.requestEnvelope.context.System.device.supportedInterfaces[
+      handlerInput.requestEnvelope.context.System.device?.supportedInterfaces[
         "Alexa.Presentation.APL"
       ]
     );
@@ -77,7 +77,7 @@ const DisplayDeviceSendEventIntent: RequestHandler = {
   },
 };
 
-export const handler = async (event, context) => {
+export const handler = async (event: any, context: any) => {
   const skill = SkillBuilders.custom()
     .addRequestHandlers(
       LaunchRequestHandler,
