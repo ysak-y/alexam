@@ -85,6 +85,23 @@ export class SkillRequestFactory {
       .getRequest();
   }
 
+  sessionEndedRequest(
+    reason: string = "USER_INITIATED",
+    error?: { type: string; message: string },
+  ): RequestEnvelope {
+    const payload = this.withRequest({
+      type: "SessionEndedRequest",
+      reason,
+      ...this.requestBase(),
+    }).getRequest();
+
+    if (error) {
+      payload.error = error;
+    }
+
+    return payload;
+  }
+
   withSession() {
     this._request.session = this.session.toJson();
     return this;
