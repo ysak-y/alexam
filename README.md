@@ -34,7 +34,7 @@ It sounds some benefits but doesn't support alexam (for now) because
 - Complecate for multilingual skill
 
 If your alexa skill would be multilingual, what language will you choose for actual test?
-If you think it's important to check whether work correctly by actual utterance, will you prepare whole supporting language pattern for each test case?
+If you think it's important to check whether work correctly by actual utterance, will you prepare whole supporting language for each test case?
 It sounds complecate for me. Sometimes it would be noisy for designing test suite.
 You would think test case with actual utterance would be easy to understand the purpose of the case, but I think it would be same if intent name is proper. 
 
