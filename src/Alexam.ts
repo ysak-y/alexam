@@ -15,6 +15,9 @@ export class Alexam {
   async send(request: RequestEnvelope) {
     const resp = await this.handler.handle(request);
     this.updateSession(resp);
+    if (resp.response.shouldEndSession === true) {
+      await this.send(this.requestFactory.sessionEndedRequest());
+    }
     return resp;
   }
 
