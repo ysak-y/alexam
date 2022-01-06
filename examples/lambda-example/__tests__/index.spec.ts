@@ -1,4 +1,10 @@
-import { Alexam, AlexamBuilder, LambdaHandler } from "../../../lib/";
+import {
+  Alexam,
+  AlexamBuilder,
+  LambdaHandler,
+  SkillRequestFactory,
+  Session,
+} from "../../../lib/";
 import { handler } from "../src";
 import { ui } from "ask-sdk-model";
 
@@ -81,4 +87,21 @@ test("Simulate request of Alexa.Presentation.APL.UserEvent", async () => {
       "Request from UserEvent",
     );
   });
+});
+
+test("Use pre defined session attributes", async () => {
+  const handlerObj = new LambdaHandler(handler);
+  const skillRequestFactory = new SkillRequestFactory(
+    "en-US",
+    new Session("my-application-id", { count: 10 }),
+  );
+  const alexam: Alexam = new AlexamBuilder()
+    .setHandler(handlerObj)
+    .setSkillRequestFactory(skillRequestFactory)
+    .build();
+  const requestFactory = alexam.requestFactory;
+  const countUpIntent = requestFactory.intentRequest("CountUpIntent");
+
+  const resp = await alexam.send(countUpIntent);
+  expect(resp.sessionAttributes?.count).toBe(11);
 });
