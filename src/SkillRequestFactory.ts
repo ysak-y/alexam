@@ -72,7 +72,7 @@ export class SkillRequestFactory {
     eventArguments?: [any];
     source?: any;
     components?: any;
-  }) {
+  }): RequestEnvelope {
     return this.withSession()
       .withRequest({
         type: "Alexa.Presentation.APL.UserEvent",
