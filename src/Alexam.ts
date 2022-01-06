@@ -28,7 +28,7 @@ export class Alexam {
 
   resetSession() {
     this.requestFactory.session = new Session(
-      this.requestFactory.applicationId
-    )
+      this.requestFactory.applicationId,
+    );
   }
 }
