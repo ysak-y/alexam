@@ -12,7 +12,7 @@ const LaunchRequestHandler: RequestHandler = {
   },
 };
 
-const handler = async (event, context) => {
+const handler = async (event: any, context: any) => {
   const skill = SkillBuilders.custom()
     .addRequestHandlers(LaunchRequestHandler)
     .create();
