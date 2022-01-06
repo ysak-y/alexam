@@ -4,7 +4,19 @@ It is highly inspired by virtual-alexa.
 
 ## Why alexam
 
-WIP
+### Configure easily
+
+You can configure Alexam easily. `new AlexamBuilder().setHandler(handlerObj).build()` is the minimum configuration.
+And if you want to set pre-defined `context` or `session` object, you can build and set these easily.
+
+### Simulate several type of request easily
+
+You can build `LaunchRequest`, `IntentRequest`, `SessionEndedRequest` and `Alexa.Presentation.APL.UserEvent` type request easily. And you can build your own custom request.
+
+### Deal request and response same as official ask-sdk type
+
+Type of mock request built by Alexam is same as [RequestEnvelope](https://github.com/alexa/alexa-apis-for-nodejs/blob/master/ask-sdk-model/index.ts#L605-L622) which is the general request interface in [official sdk](https://github.com/alexa/alexa-skills-kit-sdk-for-nodejs). And response from Alexam is [ResponseEnvelope](https://github.com/alexa/alexa-apis-for-nodejs/blob/master/ask-sdk-model/index.ts#L645-L650) which is the general response interface in official sdk also.
+It means you can simulate actual execution environment with Alexam.
 
 ## Install
 
