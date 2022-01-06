@@ -1,13 +1,14 @@
 import * as uuid from "uuid";
 
 export class Session {
-  attributes: { [id: string]: any } = {};
+  attributes: { [id: string]: any };
   new: boolean = true;
   sessionId: string = "amzn1.echo-api.session." + uuid.v4();
   applicationId: string;
 
-  constructor(applicationId: string) {
+  constructor(applicationId: string, attributes: { [id: string]: any } = {}) {
     this.applicationId = applicationId;
+    this.attributes = attributes;
   }
 
   toJson() {
