@@ -1,8 +1,19 @@
 # alexam
 Simulate Alexa interaction for testing and debugging (beta).
-It is highly inspired by virtual-alexa.
+It is highly inspired by [virtual-alexa](https://github.com/bespoken/virtual-alexa).
 
-## Why alexam
+## Features
+
+### Send mock request to your handler and get resopnse
+
+alexam can mock sevaral types of request in alexa-skill-kit like `LaunchRequest`, `IntentRequest` and `Alexa.Presentation.APL.UserEvent`.
+And can send it to your handler. So you can test your handler easily.
+
+### Retain session attributes
+
+alexam can retain session attributes until end session. So you can test multi-turn interaciton.
+
+## Why alexam?
 
 ### Configure easily
 
@@ -13,7 +24,7 @@ And if you want to set pre-defined `context` or `session` object, you can build 
 
 You can build `LaunchRequest`, `IntentRequest`, `SessionEndedRequest` and `Alexa.Presentation.APL.UserEvent` type request easily. And you can build your own custom request.
 
-### Deal request and response same as official ask-sdk type
+### Request and response objects are same as official ask-sdk type
 
 Type of mock request built by Alexam is same as [RequestEnvelope](https://github.com/alexa/alexa-apis-for-nodejs/blob/master/ask-sdk-model/index.ts#L605-L622) which is the general request interface in [official sdk](https://github.com/alexa/alexa-skills-kit-sdk-for-nodejs). And response from Alexam is [ResponseEnvelope](https://github.com/alexa/alexa-apis-for-nodejs/blob/master/ask-sdk-model/index.ts#L645-L650) which is the general response interface in official sdk also.
 It means you can simulate actual execution environment with Alexam.
@@ -27,6 +38,9 @@ It means you can simulate actual execution environment with Alexam.
 `$ npm install --save-dev alexam`
 
 ## Getting Started
+
+Following is the minimul example that simulate skill interaction with alexam.
+If you want to more actual usage of alexam, please see [example test cases](./examples/lambda-example/__tests__/index.spec.ts).
 
 ```typescript
 import { AlexamBuilder, LambdaHandler } from "alexam";
