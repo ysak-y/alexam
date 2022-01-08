@@ -9,7 +9,8 @@
   "private": false,
   "types": "lib/index.d.ts",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "test": "jest"
   },
   "devDependencies": {
     "@babel/core": "^7.16.5",

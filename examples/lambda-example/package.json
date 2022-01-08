@@ -5,6 +5,9 @@
   "main": "index.js",
   "license": "MIT",
   "private": true,
+  "scripts": {
+    "test": "jest"
+  },
   "dependencies": {
     "ask-sdk": "^2.11.0"
   },
