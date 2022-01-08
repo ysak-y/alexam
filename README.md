@@ -26,9 +26,41 @@ It means you can simulate actual execution environment with Alexam.
 ### npm
 `$ npm install --save-dev alexam`
 
-## Usage
+## Getting Started
 
-WIP
+```typescript
+import { AlexamBuilder, LambdaHandler } from "alexam";
+import { SkillBuilders, HandlerInput, RequestHandler } from "ask-sdk";
+
+// Configure handler
+const LaunchRequestHandler: RequestHandler = {
+  canHandle(handlerInput: HandlerInput): boolean {
+    return handlerInput.requestEnvelope.request.type === "LaunchRequest";
+  },
+  handle(handlerInput: HandlerInput) {
+    const speechText = "Welcome to the Alexa Skills Kit, you can say hello!";
+
+    return handlerInput.responseBuilder.speak(speechText).getResponse();
+  },
+};
+
+const handler = SkillBuilders.custom()
+  .addRequestHandlers(LaunchRequestHandler)
+  .lambda();
+
+// Configure alexam
+const alexam = new AlexamBuilder()
+  .setHandler(new LambdaHandler(handler))
+  .build();
+
+// Build mock LaunchRequest
+const launchRequest = alexam.requestFactory.launchRequest();
+
+// Send mock LaunchRequest to hadndler by using alexam.
+Promise.resolve(alexam.send(launchRequest)).then(response => {
+  console.log(`response is ${JSON.stringify(response)}`); -> // response is {"version":"1.0","response":{"outputSpeech":{"type":"SSML","ssml":"<speak>Welcome to the Alexa Skills Kit, you can say hello!</speak>"}},"userAgent":"ask-node/2.11.0 Node/v17.3.0","sessionAttributes":{}}
+});
+```
 
 ## Anything else
 
