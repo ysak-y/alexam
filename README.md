@@ -39,8 +39,8 @@ It means you can simulate actual execution environment with Alexam.
 
 ## Getting Started
 
-Following is the minimul example that simulate skill interaction with alexam.
-If you want to more actual usage of alexam, please see [example test cases](./examples/lambda-example/__tests__/index.spec.ts).
+Following is the minimum example that simulate skill interaction with alexam.
+If you want to know more actual usage of alexam, please see [example test cases](./examples/lambda-example/__tests__/index.spec.ts).
 
 ```typescript
 import { AlexamBuilder, LambdaHandler } from "alexam";
