@@ -10,7 +10,24 @@ export class LambdaHandler implements Handler {
   }
 
   async handle(request: RequestEnvelope): Promise<any> {
-    return this.handlerFunction(request, {}, {});
+    return new Promise(async (resolve, reject) => {
+      const callback = (error: Error, result: any) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result);
+        }
+      };
+
+      try {
+        const response = await this.handlerFunction(request, {}, callback);
+        if (response) {
+          resolve(response);
+        }
+      } catch (e) {
+        reject(e);
+      }
+    });
   }
 }
 
