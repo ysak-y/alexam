@@ -21,17 +21,17 @@ export class Alexam {
     return resp;
   }
 
-  updateSession(response: ResponseEnvelope) {
+  resetSession() {
+    this.requestFactory.session = new Session(
+      this.requestFactory.applicationId,
+    );
+  }
+
+  private updateSession(response: ResponseEnvelope) {
     this.requestFactory.session.new = false;
     const attributes = response.sessionAttributes;
     if (attributes) {
       this.requestFactory.session.attributes = attributes;
     }
-  }
-
-  resetSession() {
-    this.requestFactory.session = new Session(
-      this.requestFactory.applicationId,
-    );
   }
 }
