@@ -76,6 +76,54 @@ Promise.resolve(alexam.send(launchRequest)).then(response => {
 });
 ```
 
+To send request to your handler from alexam, you need to
+1. Configure alexam with your handler
+2. Build mock request by SkillRequestFactory
+3. Call `send()` with mock request
+
+### 1. Configure alexam with your handler
+
+At first, you should build new alexam object from `AlexamBuilder`. You can build it just calling `setHandler()` then `build()` method as minimum configuration.
+You can add more settings if you want. Please see Reference section.
+
+### 2. Build mock request by SkillRequestFactory
+
+You can build mock request by using `SkillRequestFactory`. Please see Reference section how to build these.
+
+### 3. Call `send()` with mock requestConfigure alexam with your handler
+
+So then, you can send mock request to your handler by `alexam.send()` method. Response object is same as [ResponseEnvelope](https://github.com/alexa/alexa-apis-for-nodejs/blob/master/ask-sdk-model/index.ts#L645-L650) which is the general response interface in official sdk.
+
+### For testing
+
+Following code is the test example with [jest](https://jestjs.io/) framework.
+If you want to know more actual usage of alexam, please see [example test cases](./examples/lambda-example/__tests__/index.spec.ts).
+
+``` typescript
+import {
+  Alexam,
+  AlexamBuilder,
+  LambdaHandler,
+  SkillRequestFactory,
+  Session,
+} from "alexam";
+import { handler } from "../src";
+import { ui } from "ask-sdk-model";
+
+test("LaunchRequest", async () => {
+  expect.assertions(1);
+  const handlerObj = new LambdaHandler(handler);
+  const alexam: Alexam = new AlexamBuilder().setHandler(handlerObj).build();
+  const launchRequest = alexam.requestFactory.launchRequest();
+
+  await alexam.send(launchRequest).then(res => {
+    expect((res.response.outputSpeech as ui.SsmlOutputSpeech).ssml).toMatch(
+      "Welcome to the Alexa Skills Kit, you can say hello!",
+    );
+  });
+});
+```
+
 ## Anything else
 
 ### Doesn't support remote debugging
