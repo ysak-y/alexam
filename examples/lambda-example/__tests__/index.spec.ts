@@ -135,3 +135,42 @@ test("Test with account linked user", async () => {
     "Request from account linked user",
   );
 });
+
+describe("Multiple test cases with one alexam object for demonstrating resetSession", () => {
+  const alexam = new AlexamBuilder()
+    .setHandler(new LambdaHandler(handler))
+    .build();
+
+  afterEach(() => {
+    alexam.resetSession();
+  });
+
+  test("Retain session attributes", async () => {
+    expect.assertions(1);
+    const requestFactory = alexam.requestFactory;
+    const countUpIntent = requestFactory.intentRequest("CountUpIntent");
+
+    return alexam
+      .send(countUpIntent)
+      .then(() => {
+        const countUpIntent2 = requestFactory.intentRequest("CountUpIntent");
+        return alexam.send(countUpIntent2);
+      })
+      .then(res => {
+        expect(res.sessionAttributes?.count).toBe(2);
+      });
+  });
+
+  test("Use pre defined session attributes", async () => {
+    alexam.skillContext.setSession(
+      new Session({
+        applicationId: alexam.skillContext.applicationId,
+        attributes: { count: 10 },
+      }),
+    );
+    const countUpIntent = alexam.requestFactory.intentRequest("CountUpIntent");
+
+    const resp = await alexam.send(countUpIntent);
+    expect(resp.sessionAttributes?.count).toBe(11);
+  });
+});
