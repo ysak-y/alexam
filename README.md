@@ -72,7 +72,7 @@ const launchRequest = alexam.requestFactory.launchRequest();
 
 // Send mock LaunchRequest to hadndler by using alexam.
 Promise.resolve(alexam.send(launchRequest)).then(response => {
-  console.log(`response is ${JSON.stringify(response)}`); -> // response is {"version":"1.0","response":{"outputSpeech":{"type":"SSML","ssml":"<speak>Welcome to the Alexa Skills Kit, you can say hello!</speak>"}},"userAgent":"ask-node/2.11.0 Node/v17.3.0","sessionAttributes":{}}
+  console.log(`response is ${JSON.stringify(response)}`); // -> response is {"version":"1.0","response":{"outputSpeech":{"type":"SSML","ssml":"<speak>Welcome to the Alexa Skills Kit, you can say hello!</speak>"}},"userAgent":"ask-node/2.11.0 Node/v17.3.0","sessionAttributes":{}}
 });
 ```
 
