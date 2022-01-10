@@ -2,6 +2,7 @@ import { SkillContext } from "./SkillContext";
 import * as uuid from "uuid";
 import { RequestEnvelope } from "ask-sdk-model";
 import { IntentRequest } from "./SkillRequest";
+import { interfaces } from "ask-sdk-model";
 
 export class SkillRequestFactory {
   skillContext: SkillContext;
@@ -74,6 +75,27 @@ export class SkillRequestFactory {
         ...this.requestBase(),
       })
       .getRequest();
+  }
+
+  connectionsResponse({
+    name,
+    payload,
+    status,
+    token,
+  }: {
+    name?: string;
+    payload?: { [key: string]: any };
+    status?: interfaces.connections.ConnectionsStatus;
+    token?: string;
+  }): RequestEnvelope {
+    return this.withRequest({
+      type: "Connections.Response",
+      name,
+      status,
+      payload,
+      token,
+      ...this.requestBase(),
+    }).getRequest();
   }
 
   sessionEndedRequest(
