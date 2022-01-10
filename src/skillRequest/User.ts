@@ -4,7 +4,7 @@ export class User {
   id: string = "amzn1.ask.account." + uuid.v4();
   accessToken?: string;
 
-  withLinkAccount() {
+  linkAccount() {
     this.accessToken = uuid.v4();
   }
 }
