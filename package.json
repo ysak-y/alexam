@@ -8,6 +8,11 @@
   "license": "MIT",
   "private": false,
   "types": "lib/index.d.ts",
+  "keywords": [
+    "alexa",
+    "alexa-skill-kit",
+    "ask-sdk-for-nodejs-v2"
+  ],
   "scripts": {
     "build": "tsc",
     "test": "jest"
