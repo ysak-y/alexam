@@ -1,3 +1,4 @@
+import { SkillContext } from "./SkillContext";
 import { Handler } from "./Handler";
 import { RequestEnvelope, ResponseEnvelope } from "ask-sdk-model";
 import { SkillRequestFactory } from ".";
@@ -6,10 +7,16 @@ import { Session } from "./skillRequest/Session";
 export class Alexam {
   handler: Handler;
   requestFactory: SkillRequestFactory;
+  skillContext: SkillContext;
 
-  constructor(handler: Handler, requestFactory: SkillRequestFactory) {
+  constructor(
+    handler: Handler,
+    requestFactory: SkillRequestFactory,
+    skillContext: SkillContext,
+  ) {
     this.handler = handler;
     this.requestFactory = requestFactory;
+    this.skillContext = skillContext;
   }
 
   async send(request: RequestEnvelope) {
@@ -22,16 +29,16 @@ export class Alexam {
   }
 
   resetSession() {
-    this.requestFactory.session = new Session(
-      this.requestFactory.applicationId,
+    this.skillContext.setSession(
+      new Session({ applicationId: this.skillContext.applicationId }),
     );
   }
 
   private updateSession(response: ResponseEnvelope) {
-    this.requestFactory.session.new = false;
+    this.skillContext.session.new = false;
     const attributes = response.sessionAttributes;
     if (attributes) {
-      this.requestFactory.session.attributes = attributes;
+      this.skillContext.session.attributes = attributes;
     }
   }
 }

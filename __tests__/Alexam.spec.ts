@@ -24,10 +24,10 @@ test("Update new property of session to false", async () => {
   const alexam = new AlexamBuilder()
     .setHandler(new LambdaHandler(handler))
     .build();
-  expect(alexam.requestFactory.session.new).toBe(true);
+  expect(alexam.skillContext.session.new).toBe(true);
   const launchRequest = alexam.requestFactory.launchRequest();
   await alexam.send(launchRequest);
-  expect(alexam.requestFactory.session.new).toBe(false);
+  expect(alexam.skillContext.session.new).toBe(false);
 });
 
 test("Reset session", async () => {
@@ -36,7 +36,7 @@ test("Reset session", async () => {
     .build();
   const launchRequest = alexam.requestFactory.launchRequest();
   await alexam.send(launchRequest);
-  expect(alexam.requestFactory.session.new).toBe(false);
+  expect(alexam.skillContext.session.new).toBe(false);
   alexam.resetSession();
-  expect(alexam.requestFactory.session.new).toBe(true);
+  expect(alexam.skillContext.session.new).toBe(true);
 });

@@ -2,8 +2,10 @@ import {
   Alexam,
   AlexamBuilder,
   LambdaHandler,
-  SkillRequestFactory,
   Session,
+  Context,
+  User,
+  SkillContext,
 } from "../../../lib/";
 import { handler } from "../src";
 import { ui } from "ask-sdk-model";
@@ -56,9 +58,12 @@ test("Retain session attributes", async () => {
 test("Simulate request from display device", async () => {
   expect.assertions(1);
   const handlerObj = new LambdaHandler(handler);
+  const skillContext = new SkillContext();
+  skillContext.setDisplay();
+
   const alexam: Alexam = new AlexamBuilder()
     .setHandler(handlerObj)
-    .setDisplay()
+    .setSkillContext(skillContext)
     .build();
   const requestFactory = alexam.requestFactory;
   const displayDeviceIntent = requestFactory.intentRequest(
@@ -75,9 +80,12 @@ test("Simulate request from display device", async () => {
 test("Simulate request of Alexa.Presentation.APL.UserEvent", async () => {
   expect.assertions(1);
   const handlerObj = new LambdaHandler(handler);
+  const skillContext = new SkillContext();
+  skillContext.setDisplay();
+
   const alexam: Alexam = new AlexamBuilder()
     .setHandler(handlerObj)
-    .setDisplay()
+    .setSkillContext(skillContext)
     .build();
   const requestFactory = alexam.requestFactory;
   const aplUserEventRequest = requestFactory.aplUserEventRequest({});
@@ -91,17 +99,39 @@ test("Simulate request of Alexa.Presentation.APL.UserEvent", async () => {
 
 test("Use pre defined session attributes", async () => {
   const handlerObj = new LambdaHandler(handler);
-  const skillRequestFactory = new SkillRequestFactory(
-    "en-US",
-    new Session("my-application-id", { count: 10 }),
+  const skillContext = new SkillContext();
+  skillContext.setSession(
+    new Session({
+      applicationId: skillContext.applicationId,
+      attributes: { count: 10 },
+    }),
   );
   const alexam: Alexam = new AlexamBuilder()
     .setHandler(handlerObj)
-    .setSkillRequestFactory(skillRequestFactory)
+    .setSkillContext(skillContext)
     .build();
-  const requestFactory = alexam.requestFactory;
-  const countUpIntent = requestFactory.intentRequest("CountUpIntent");
+  const countUpIntent = alexam.requestFactory.intentRequest("CountUpIntent");
 
   const resp = await alexam.send(countUpIntent);
   expect(resp.sessionAttributes?.count).toBe(11);
+});
+
+test("Test with account linked user", async () => {
+  const handlerObj = new LambdaHandler(handler);
+  const user = new User();
+  user.linkAccount();
+  const skillContext = new SkillContext();
+  skillContext.setContext(new Context({ user }));
+
+  const alexam: Alexam = new AlexamBuilder()
+    .setHandler(handlerObj)
+    .setSkillContext(skillContext)
+    .build();
+  const requestFactory = alexam.requestFactory;
+  const launchRequest = requestFactory.launchRequest();
+
+  const resp = await alexam.send(launchRequest);
+  expect((resp.response.outputSpeech as ui.SsmlOutputSpeech).ssml).toMatch(
+    "Request from account linked user",
+  );
 });

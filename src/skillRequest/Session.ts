@@ -6,9 +6,17 @@ export class Session {
   sessionId: string = "amzn1.echo-api.session." + uuid.v4();
   applicationId: string;
 
-  constructor(applicationId: string, attributes: { [id: string]: any } = {}) {
-    this.applicationId = applicationId;
-    this.attributes = attributes;
+  constructor({
+    applicationId,
+    attributes,
+  }: {
+    applicationId?: string;
+    attributes?: { [id: string]: any };
+  }) {
+    this.applicationId = applicationId
+      ? applicationId
+      : "amzn1.echo-api.session." + uuid.v4();
+    this.attributes = attributes ? attributes : {};
   }
 
   toJson() {

@@ -5,3 +5,4 @@ export { LambdaHandler, BaseHandler } from "./Handler";
 export { Session } from "./skillRequest/Session";
 export { Context } from "./skillRequest/Context";
 export { User } from "./skillRequest/User";
+export { SkillContext } from "./SkillContext";

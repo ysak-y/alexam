@@ -11,9 +11,17 @@ export class Context {
   viewport?: interfaces.viewport.ViewportState;
   user: User;
 
-  constructor(applicationId: string, user: User) {
-    this.applicationId = applicationId;
-    this.user = user;
+  constructor({
+    user,
+    applicationId,
+  }: {
+    user?: User;
+    applicationId?: string;
+  }) {
+    this.applicationId = applicationId
+      ? applicationId
+      : "amzn1.ask.skill." + uuid.v4();
+    this.user = user ? user : new User();
   }
 
   toJson() {

@@ -77,9 +77,24 @@ const DisplayDeviceSendEventIntent: RequestHandler = {
   },
 };
 
+const AccountLinkedUserLaunchRequest: RequestHandler = {
+  canHandle(handlerInput: HandlerInput): boolean {
+    return !!(
+      handlerInput.requestEnvelope.request.type === "LaunchRequest" &&
+      handlerInput.requestEnvelope.context.System.user.accessToken
+    );
+  },
+  handle(handlerInput: HandlerInput) {
+    return handlerInput.responseBuilder
+      .speak("Request from account linked user")
+      .getResponse();
+  },
+};
+
 export const handler = async (event: any, context: any) => {
   const skill = SkillBuilders.custom()
     .addRequestHandlers(
+      AccountLinkedUserLaunchRequest,
       LaunchRequestHandler,
       HelloWorldIntentHandler,
       CountUpIntentHandler,
