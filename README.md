@@ -170,6 +170,10 @@ Build mock `IntentRequest`.
 
 Build mock `Alexa.Presentation.APL.UserEvent`.
 
+#### `connectionsResponse({ name, payload, status, token, }: { name?: string; payload?: { [key: string]: any }; status?: interfaces.connections.ConnectionsStatus; token?: string; }): RequestEnvelope`
+
+Build mock `Connections.Response`.
+
 #### `sessionEndedRequest(reason: string = "USER_INITIATED", error?: { type: string; message: string },): RequestEnvelope`
 
 Build mock `SessionEndedRequest`.
