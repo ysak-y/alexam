@@ -1,6 +1,6 @@
 {
   "name": "alexam",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Simulate Alexa interaction for testing and debugging",
   "main": "lib/index.js",
   "repository": "git@github.com:ysak-y/alexam.git",
