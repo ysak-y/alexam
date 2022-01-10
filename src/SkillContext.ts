@@ -1,5 +1,4 @@
 import { interfaces } from "ask-sdk-model";
-import { User } from "./skillRequest/User";
 import { Context } from "./skillRequest/Context";
 import { Session } from "./skillRequest/Session";
 import * as uuid from "uuid";
