@@ -15,11 +15,6 @@ export class AlexamBuilder {
     return this;
   }
 
-  setSkillRequestFactory(skillRequestFactory: SkillRequestFactory) {
-    this.skillRequestFactory = skillRequestFactory;
-    return this;
-  }
-
   setHandler(handler: Handler) {
     this._handler = handler;
     return this;
