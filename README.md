@@ -9,7 +9,7 @@ It is highly inspired by [virtual-alexa](https://github.com/bespoken/virtual-ale
 alexam can mock sevaral types of request in alexa-skill-kit like `LaunchRequest`, `IntentRequest` and `Alexa.Presentation.APL.UserEvent`.
 And can send it to your handler. So you can test your handler easily.
 
-### Retain session attributes
+### Manage and retain session while interacting
 
 alexam can retain session attributes until end session. So you can test multi-turn interaciton.
 
@@ -39,7 +39,7 @@ It means you can simulate actual execution environment with Alexam.
 
 ## Getting Started
 
-Following is the minimum example that simulate skill interaction with alexam.
+Following is the minimum example that simulates skill interaction with alexam.
 If you want to know more actual usage of alexam, please see [example test cases](./examples/lambda-example/__tests__/index.spec.ts).
 
 ```typescript
@@ -122,6 +122,129 @@ test("LaunchRequest", async () => {
     );
   });
 });
+```
+
+## Reference
+
+### AlexamBuilder
+
+Builder for alexam.
+
+#### `setSkillContext(skillContext: SkillContext)`
+
+Set your cumstom `SkillContext` object to `AlexamBuilder`. You would want to use it if you need to customize session or context property of mock request.
+
+#### `setHandler(handler: Handler)`
+
+Set Handler object you want to send mock request. alexam would throw error if build without handler.
+
+#### `build(): Alexam`
+
+Build alexam object with set configurations.
+
+### Alexam
+
+Interact to handler and manage session until session close.
+
+#### `async send(request: RequestEnvelope)`
+
+Send request to Handler you set. Would send `SessionEndedRequest` automatically if response includes `shouldEndSession: true`.
+
+#### `resetSession()`
+
+Reset session in SkillRequestFactory (= overwrite by new Session object).
+
+### SkillRequestFacotry
+
+Builder for mock request object.
+
+#### `launchRequest(): RequestEnvelope`
+
+Build mock `LaunchRequest`.
+
+#### `intentRequest(intentName: string, slots?: { [slotName: string]: any },): RequestEnvelope`
+
+Build mock `IntentRequest`.
+
+#### `aplUserEventRequest({token, eventArguments, source, components, }: { token?: string; eventArguments?: [any]; source?: any; components?: any; }): RequestEnvelope`
+
+Build mock `Alexa.Presentation.APL.UserEvent`.
+
+#### `sessionEndedRequest(reason: string = "USER_INITIATED", error?: { type: string; message: string },): RequestEnvelope`
+
+Build mock `SessionEndedRequest`.
+
+#### `withSession()`
+
+Adds json object of `Session` to internal request object. You can take it by using `getRequest()`.
+Use this method if you want to build your own custom request like following.
+
+```typescript
+const mockRequest = skillRequestFactory
+  .withSession()
+  .withRequest(someRequestJson)
+  .getRequest();
+```
+
+If you want to customize `Session`, you should it throught `SkillContext` object.
+
+```typescript
+skillRequestFactory.skillContext = newSkillContext;
+const mockRequest = skillRequestFactory
+  .withSession() // <- This includes session in newSkillContext
+  .withRequest(someRequestJson)
+  .getRequest();
+```
+
+#### `withRequest(request: any)`
+
+Adds `request` to `request` property of internal request object. You can take it by using `getRequest()`.
+Use this method if you want to build your own custom request like following.
+
+```typescript
+const mockRequest = skillRequestFactory
+  .withRequest(someRequestJson)
+  .getRequest();
+```
+
+#### `getRequest()`
+
+Return internal request of `SkillRequestFactory`. It means you can take your custom object by using `withSession()` and `withRequest()` by this method.
+
+### SkillContext
+
+Manage `Session`, `Context` and both related objects.
+
+#### setSession(session: Session)
+
+Set new `Session` object.
+
+#### setContext(context: Context)
+
+Set new `Context` object.
+
+#### setDisplay(viewport: interfaces.viewport.ViewportState = {})
+
+Utility method for setting display information to `Context` object.
+This sets `Alexa.Presentation.APL` as supported interface and `viewport` to viewport in `Context`.
+
+### User
+
+#### `linkAccount()`
+
+Sets randomized value to `accessToken`. It is useful when you want to simulate request from account linked user.
+
+```typescript
+const user = new User();
+user.linkAccount();
+
+const skillContext = new SkillContext();
+skillContext.setContext(new Context({ user }));
+
+const alexam: Alexam = new AlexamBuilder()
+  .setHandler(handlerObj)
+  .setSkillContext(skillContext)
+  .build();
 ```
 
 ## Anything else
