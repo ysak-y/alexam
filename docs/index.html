@@ -1,0 +1,258 @@
+<!DOCTYPE html><html class="default"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>alexam</title><meta name="description" content="Documentation for alexam"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script></head><body><script>document.body.classList.add(localStorage.getItem("tsd-theme") || "os")</script><header><div class="tsd-page-toolbar"><div class="container"><div class="table-wrap"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget search no-caption">Search</label><input type="text" id="tsd-search-field"/></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">alexam</a></div><div class="table-cell" id="tsd-widgets"><div id="tsd-filter"><a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a><div class="tsd-filter-group"><div class="tsd-select" id="tsd-filter-visibility"><span class="tsd-select-label">All</span><ul class="tsd-select-list"><li data-value="public">Public</li><li data-value="protected">Public/Protected</li><li data-value="private" class="selected">All</li></ul></div> <input type="checkbox" id="tsd-filter-inherited" checked/><label class="tsd-widget" for="tsd-filter-inherited">Inherited</label><input type="checkbox" id="tsd-filter-externals" checked/><label class="tsd-widget" for="tsd-filter-externals">Externals</label></div></div><a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a></div></div></div></div><div class="tsd-page-title"><div class="container"><h1>alexam</h1></div></div></header><div class="container container-main"><div class="row"><div class="col-8 col-content"><div class="tsd-panel tsd-typography">
+<a href="#alexam" id="alexam" style="color: inherit; text-decoration: none;">
+  <h1>alexam</h1>
+</a>
+<p>Simulate Alexa interaction for testing and debugging (beta).
+It is highly inspired by <a href="https://github.com/bespoken/virtual-alexa">virtual-alexa</a>.</p>
+
+<a href="#features" id="features" style="color: inherit; text-decoration: none;">
+  <h2>Features</h2>
+</a>
+
+<a href="#send-mock-request-to-your-handler-and-get-resopnse" id="send-mock-request-to-your-handler-and-get-resopnse" style="color: inherit; text-decoration: none;">
+  <h3>Send mock request to your handler and get resopnse</h3>
+</a>
+<p>alexam can mock sevaral types of request in alexa-skill-kit like <code>LaunchRequest</code>, <code>IntentRequest</code> and <code>Alexa.Presentation.APL.UserEvent</code>.
+And can send it to your handler. So you can test your handler easily.</p>
+
+<a href="#manage-and-retain-session-while-interacting" id="manage-and-retain-session-while-interacting" style="color: inherit; text-decoration: none;">
+  <h3>Manage and retain session while interacting</h3>
+</a>
+<p>alexam can retain session attributes until end session. So you can test multi-turn interaciton.</p>
+
+<a href="#why-alexam" id="why-alexam" style="color: inherit; text-decoration: none;">
+  <h2>Why alexam?</h2>
+</a>
+
+<a href="#configure-easily" id="configure-easily" style="color: inherit; text-decoration: none;">
+  <h3>Configure easily</h3>
+</a>
+<p>You can configure Alexam easily. <code>new AlexamBuilder().setHandler(handlerObj).build()</code> is the minimum configuration.
+And if you want to set pre-defined <code>context</code> or <code>session</code> object, you can build and set these easily.</p>
+
+<a href="#simulate-several-type-of-request-easily" id="simulate-several-type-of-request-easily" style="color: inherit; text-decoration: none;">
+  <h3>Simulate several type of request easily</h3>
+</a>
+<p>You can build <code>LaunchRequest</code>, <code>IntentRequest</code>, <code>SessionEndedRequest</code> and <code>Alexa.Presentation.APL.UserEvent</code> type request easily. And you can build your own custom request.</p>
+
+<a href="#request-and-response-objects-are-same-as-official-ask-sdk-type" id="request-and-response-objects-are-same-as-official-ask-sdk-type" style="color: inherit; text-decoration: none;">
+  <h3>Request and response objects are same as official ask-sdk type</h3>
+</a>
+<p>Type of mock request built by Alexam is same as <a href="https://github.com/alexa/alexa-apis-for-nodejs/blob/master/ask-sdk-model/index.ts#L605-L622">RequestEnvelope</a> which is the general request interface in <a href="https://github.com/alexa/alexa-skills-kit-sdk-for-nodejs">official sdk</a>. And response from Alexam is <a href="https://github.com/alexa/alexa-apis-for-nodejs/blob/master/ask-sdk-model/index.ts#L645-L650">ResponseEnvelope</a> which is the general response interface in official sdk also.
+It means you can simulate actual execution environment with Alexam.</p>
+
+<a href="#install" id="install" style="color: inherit; text-decoration: none;">
+  <h2>Install</h2>
+</a>
+
+<a href="#yarn" id="yarn" style="color: inherit; text-decoration: none;">
+  <h3>yarn</h3>
+</a>
+<p><code>$ yarn add -D alexam</code></p>
+
+<a href="#npm" id="npm" style="color: inherit; text-decoration: none;">
+  <h3>npm</h3>
+</a>
+<p><code>$ npm install --save-dev alexam</code></p>
+
+<a href="#getting-started" id="getting-started" style="color: inherit; text-decoration: none;">
+  <h2>Getting Started</h2>
+</a>
+<p>Following is the minimum example that simulates skill interaction with alexam.
+If you want to know more actual usage of alexam, please see <a href="./examples/lambda-example/__tests__/index.spec.ts">example test cases</a>.</p>
+<pre><code class="language-typescript"><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">AlexamBuilder</span><span class="hl-1">, </span><span class="hl-2">LambdaHandler</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&quot;alexam&quot;</span><span class="hl-1">;</span><br/><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">SkillBuilders</span><span class="hl-1">, </span><span class="hl-2">HandlerInput</span><span class="hl-1">, </span><span class="hl-2">RequestHandler</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&quot;ask-sdk&quot;</span><span class="hl-1">;</span><br/><br/><span class="hl-4">// Configure handler</span><br/><span class="hl-5">const</span><span class="hl-1"> </span><span class="hl-6">LaunchRequestHandler</span><span class="hl-1">: </span><span class="hl-7">RequestHandler</span><span class="hl-1"> = {</span><br/><span class="hl-1">  </span><span class="hl-8">canHandle</span><span class="hl-1">(</span><span class="hl-2">handlerInput</span><span class="hl-1">: </span><span class="hl-7">HandlerInput</span><span class="hl-1">): </span><span class="hl-7">boolean</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-0">return</span><span class="hl-1"> </span><span class="hl-2">handlerInput</span><span class="hl-1">.</span><span class="hl-2">requestEnvelope</span><span class="hl-1">.</span><span class="hl-2">request</span><span class="hl-1">.</span><span class="hl-2">type</span><span class="hl-1"> === </span><span class="hl-3">&quot;LaunchRequest&quot;</span><span class="hl-1">;</span><br/><span class="hl-1">  },</span><br/><span class="hl-1">  </span><span class="hl-8">handle</span><span class="hl-1">(</span><span class="hl-2">handlerInput</span><span class="hl-1">: </span><span class="hl-7">HandlerInput</span><span class="hl-1">) {</span><br/><span class="hl-1">    </span><span class="hl-5">const</span><span class="hl-1"> </span><span class="hl-6">speechText</span><span class="hl-1"> = </span><span class="hl-3">&quot;Welcome to the Alexa Skills Kit, you can say hello!&quot;</span><span class="hl-1">;</span><br/><br/><span class="hl-1">    </span><span class="hl-0">return</span><span class="hl-1"> </span><span class="hl-2">handlerInput</span><span class="hl-1">.</span><span class="hl-2">responseBuilder</span><span class="hl-1">.</span><span class="hl-8">speak</span><span class="hl-1">(</span><span class="hl-2">speechText</span><span class="hl-1">).</span><span class="hl-8">getResponse</span><span class="hl-1">();</span><br/><span class="hl-1">  },</span><br/><span class="hl-1">};</span><br/><br/><span class="hl-5">const</span><span class="hl-1"> </span><span class="hl-6">handler</span><span class="hl-1"> = </span><span class="hl-2">SkillBuilders</span><span class="hl-1">.</span><span class="hl-8">custom</span><span class="hl-1">()</span><br/><span class="hl-1">  .</span><span class="hl-8">addRequestHandlers</span><span class="hl-1">(</span><span class="hl-2">LaunchRequestHandler</span><span class="hl-1">)</span><br/><span class="hl-1">  .</span><span class="hl-8">lambda</span><span class="hl-1">();</span><br/><br/><span class="hl-4">// Configure alexam</span><br/><span class="hl-5">const</span><span class="hl-1"> </span><span class="hl-6">alexam</span><span class="hl-1"> = </span><span class="hl-5">new</span><span class="hl-1"> </span><span class="hl-8">AlexamBuilder</span><span class="hl-1">()</span><br/><span class="hl-1">  .</span><span class="hl-8">setHandler</span><span class="hl-1">(</span><span class="hl-5">new</span><span class="hl-1"> </span><span class="hl-8">LambdaHandler</span><span class="hl-1">(</span><span class="hl-2">handler</span><span class="hl-1">))</span><br/><span class="hl-1">  .</span><span class="hl-8">build</span><span class="hl-1">();</span><br/><br/><span class="hl-4">// Build mock LaunchRequest</span><br/><span class="hl-5">const</span><span class="hl-1"> </span><span class="hl-6">launchRequest</span><span class="hl-1"> = </span><span class="hl-2">alexam</span><span class="hl-1">.</span><span class="hl-2">requestFactory</span><span class="hl-1">.</span><span class="hl-8">launchRequest</span><span class="hl-1">();</span><br/><br/><span class="hl-4">// Send mock LaunchRequest to hadndler by using alexam.</span><br/><span class="hl-7">Promise</span><span class="hl-1">.</span><span class="hl-8">resolve</span><span class="hl-1">(</span><span class="hl-2">alexam</span><span class="hl-1">.</span><span class="hl-8">send</span><span class="hl-1">(</span><span class="hl-2">launchRequest</span><span class="hl-1">)).</span><span class="hl-8">then</span><span class="hl-1">(</span><span class="hl-2">response</span><span class="hl-1"> </span><span class="hl-5">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-2">console</span><span class="hl-1">.</span><span class="hl-8">log</span><span class="hl-1">(</span><span class="hl-3">`response is </span><span class="hl-5">${</span><span class="hl-7">JSON</span><span class="hl-9">.</span><span class="hl-8">stringify</span><span class="hl-9">(</span><span class="hl-2">response</span><span class="hl-9">)</span><span class="hl-5">}</span><span class="hl-3">`</span><span class="hl-1">); </span><span class="hl-4">// -&gt; response is {&quot;version&quot;:&quot;1.0&quot;,&quot;response&quot;:{&quot;outputSpeech&quot;:{&quot;type&quot;:&quot;SSML&quot;,&quot;ssml&quot;:&quot;&lt;speak&gt;Welcome to the Alexa Skills Kit, you can say hello!&lt;/speak&gt;&quot;}},&quot;userAgent&quot;:&quot;ask-node/2.11.0 Node/v17.3.0&quot;,&quot;sessionAttributes&quot;:{}}</span><br/><span class="hl-1">});</span>
+</code></pre>
+<p>To send request to your handler from alexam, you need to</p>
+<ol>
+<li>Configure alexam with your handler</li>
+<li>Build mock request by SkillRequestFactory</li>
+<li>Call <code>send()</code> with mock request</li>
+</ol>
+
+<a href="#1-configure-alexam-with-your-handler" id="1-configure-alexam-with-your-handler" style="color: inherit; text-decoration: none;">
+  <h3>1. Configure alexam with your handler</h3>
+</a>
+<p>At first, you should build new alexam object from <code>AlexamBuilder</code>. You can build it just calling <code>setHandler()</code> then <code>build()</code> method as minimum configuration.
+You can add more settings if you want. Please see Reference section.</p>
+
+<a href="#2-build-mock-request-by-skillrequestfactory" id="2-build-mock-request-by-skillrequestfactory" style="color: inherit; text-decoration: none;">
+  <h3>2. Build mock request by SkillRequestFactory</h3>
+</a>
+<p>You can build mock request by using <code>SkillRequestFactory</code>. Please see Reference section how to build these.</p>
+
+<a href="#3-call-send-with-mock-requestconfigure-alexam-with-your-handler" id="3-call-send-with-mock-requestconfigure-alexam-with-your-handler" style="color: inherit; text-decoration: none;">
+  <h3>3. Call <code>send()</code> with mock requestConfigure alexam with your handler</h3>
+</a>
+<p>So then, you can send mock request to your handler by <code>alexam.send()</code> method. Response object is same as <a href="https://github.com/alexa/alexa-apis-for-nodejs/blob/master/ask-sdk-model/index.ts#L645-L650">ResponseEnvelope</a> which is the general response interface in official sdk.</p>
+
+<a href="#for-testing" id="for-testing" style="color: inherit; text-decoration: none;">
+  <h3>For testing</h3>
+</a>
+<p>Following code is the test example with <a href="https://jestjs.io/">jest</a> framework.
+If you want to know more actual usage of alexam, please see <a href="./examples/lambda-example/__tests__/index.spec.ts">example test cases</a>.</p>
+<pre><code class="language-typescript"><span class="hl-0">import</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-2">Alexam</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-2">AlexamBuilder</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-2">LambdaHandler</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-2">SkillRequestFactory</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-2">Session</span><span class="hl-1">,</span><br/><span class="hl-1">} </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&quot;alexam&quot;</span><span class="hl-1">;</span><br/><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">handler</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&quot;../src&quot;</span><span class="hl-1">;</span><br/><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">ui</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&quot;ask-sdk-model&quot;</span><span class="hl-1">;</span><br/><br/><span class="hl-8">test</span><span class="hl-1">(</span><span class="hl-3">&quot;LaunchRequest&quot;</span><span class="hl-1">, </span><span class="hl-5">async</span><span class="hl-1"> () </span><span class="hl-5">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-2">expect</span><span class="hl-1">.</span><span class="hl-8">assertions</span><span class="hl-1">(</span><span class="hl-10">1</span><span class="hl-1">);</span><br/><span class="hl-1">  </span><span class="hl-5">const</span><span class="hl-1"> </span><span class="hl-6">handlerObj</span><span class="hl-1"> = </span><span class="hl-5">new</span><span class="hl-1"> </span><span class="hl-8">LambdaHandler</span><span class="hl-1">(</span><span class="hl-2">handler</span><span class="hl-1">);</span><br/><span class="hl-1">  </span><span class="hl-5">const</span><span class="hl-1"> </span><span class="hl-6">alexam</span><span class="hl-1">: </span><span class="hl-7">Alexam</span><span class="hl-1"> = </span><span class="hl-5">new</span><span class="hl-1"> </span><span class="hl-8">AlexamBuilder</span><span class="hl-1">().</span><span class="hl-8">setHandler</span><span class="hl-1">(</span><span class="hl-2">handlerObj</span><span class="hl-1">).</span><span class="hl-8">build</span><span class="hl-1">();</span><br/><span class="hl-1">  </span><span class="hl-5">const</span><span class="hl-1"> </span><span class="hl-6">launchRequest</span><span class="hl-1"> = </span><span class="hl-2">alexam</span><span class="hl-1">.</span><span class="hl-2">requestFactory</span><span class="hl-1">.</span><span class="hl-8">launchRequest</span><span class="hl-1">();</span><br/><br/><span class="hl-1">  </span><span class="hl-0">await</span><span class="hl-1"> </span><span class="hl-2">alexam</span><span class="hl-1">.</span><span class="hl-8">send</span><span class="hl-1">(</span><span class="hl-2">launchRequest</span><span class="hl-1">).</span><span class="hl-8">then</span><span class="hl-1">(</span><span class="hl-2">res</span><span class="hl-1"> </span><span class="hl-5">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-8">expect</span><span class="hl-1">((</span><span class="hl-2">res</span><span class="hl-1">.</span><span class="hl-2">response</span><span class="hl-1">.</span><span class="hl-2">outputSpeech</span><span class="hl-1"> </span><span class="hl-0">as</span><span class="hl-1"> </span><span class="hl-7">ui</span><span class="hl-1">.</span><span class="hl-7">SsmlOutputSpeech</span><span class="hl-1">).</span><span class="hl-2">ssml</span><span class="hl-1">).</span><span class="hl-8">toMatch</span><span class="hl-1">(</span><br/><span class="hl-1">      </span><span class="hl-3">&quot;Welcome to the Alexa Skills Kit, you can say hello!&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">    );</span><br/><span class="hl-1">  });</span><br/><span class="hl-1">});</span>
+</code></pre>
+
+<a href="#run-multiple-teets" id="run-multiple-teets" style="color: inherit; text-decoration: none;">
+  <h2>Run multiple teets</h2>
+</a>
+<p>You can run multiple tests with the alexam object.
+But alexam retains session information until session end. So you should call <code>resetSession()</code> method by each test case.</p>
+<pre><code class="language-typescript"><span class="hl-8">describe</span><span class="hl-1">(</span><span class="hl-3">&quot;Multiple test cases with one alexam object for demonstrating resetSession&quot;</span><span class="hl-1">, () </span><span class="hl-5">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-5">const</span><span class="hl-1"> </span><span class="hl-6">alexam</span><span class="hl-1"> = </span><span class="hl-5">new</span><span class="hl-1"> </span><span class="hl-8">AlexamBuilder</span><span class="hl-1">()</span><br/><span class="hl-1">    .</span><span class="hl-8">setHandler</span><span class="hl-1">(</span><span class="hl-5">new</span><span class="hl-1"> </span><span class="hl-8">LambdaHandler</span><span class="hl-1">(</span><span class="hl-2">handler</span><span class="hl-1">))</span><br/><span class="hl-1">    .</span><span class="hl-8">build</span><span class="hl-1">();</span><br/><br/><span class="hl-1">  </span><span class="hl-8">afterEach</span><span class="hl-1">(() </span><span class="hl-5">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-2">alexam</span><span class="hl-1">.</span><span class="hl-8">resetSession</span><span class="hl-1">();</span><br/><span class="hl-1">  });</span><br/><br/><span class="hl-1">  </span><span class="hl-8">test</span><span class="hl-1">(</span><span class="hl-3">&quot;Retain session attributes&quot;</span><span class="hl-1">, </span><span class="hl-5">async</span><span class="hl-1"> () </span><span class="hl-5">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-2">expect</span><span class="hl-1">.</span><span class="hl-8">assertions</span><span class="hl-1">(</span><span class="hl-10">1</span><span class="hl-1">);</span><br/><span class="hl-1">    </span><span class="hl-5">const</span><span class="hl-1"> </span><span class="hl-6">requestFactory</span><span class="hl-1"> = </span><span class="hl-2">alexam</span><span class="hl-1">.</span><span class="hl-2">requestFactory</span><span class="hl-1">;</span><br/><span class="hl-1">    </span><span class="hl-5">const</span><span class="hl-1"> </span><span class="hl-6">countUpIntent</span><span class="hl-1"> = </span><span class="hl-2">requestFactory</span><span class="hl-1">.</span><span class="hl-8">intentRequest</span><span class="hl-1">(</span><span class="hl-3">&quot;CountUpIntent&quot;</span><span class="hl-1">);</span><br/><br/><span class="hl-1">    </span><span class="hl-0">return</span><span class="hl-1"> </span><span class="hl-2">alexam</span><br/><span class="hl-1">      .</span><span class="hl-8">send</span><span class="hl-1">(</span><span class="hl-2">countUpIntent</span><span class="hl-1">)</span><br/><span class="hl-1">      .</span><span class="hl-8">then</span><span class="hl-1">(() </span><span class="hl-5">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">        </span><span class="hl-5">const</span><span class="hl-1"> </span><span class="hl-6">countUpIntent2</span><span class="hl-1"> = </span><span class="hl-2">requestFactory</span><span class="hl-1">.</span><span class="hl-8">intentRequest</span><span class="hl-1">(</span><span class="hl-3">&quot;CountUpIntent&quot;</span><span class="hl-1">);</span><br/><span class="hl-1">        </span><span class="hl-0">return</span><span class="hl-1"> </span><span class="hl-2">alexam</span><span class="hl-1">.</span><span class="hl-8">send</span><span class="hl-1">(</span><span class="hl-2">countUpIntent2</span><span class="hl-1">);</span><br/><span class="hl-1">      })</span><br/><span class="hl-1">      .</span><span class="hl-8">then</span><span class="hl-1">(</span><span class="hl-2">res</span><span class="hl-1"> </span><span class="hl-5">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">        </span><span class="hl-8">expect</span><span class="hl-1">(</span><span class="hl-2">res</span><span class="hl-1">.</span><span class="hl-2">sessionAttributes</span><span class="hl-1">?.</span><span class="hl-2">count</span><span class="hl-1">).</span><span class="hl-8">toBe</span><span class="hl-1">(</span><span class="hl-10">2</span><span class="hl-1">);</span><br/><span class="hl-1">      });</span><br/><span class="hl-1">  });</span><br/><br/><span class="hl-1">  </span><span class="hl-8">test</span><span class="hl-1">(</span><span class="hl-3">&quot;Use pre defined session attributes&quot;</span><span class="hl-1">, </span><span class="hl-5">async</span><span class="hl-1"> () </span><span class="hl-5">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-2">alexam</span><span class="hl-1">.</span><span class="hl-2">skillContext</span><span class="hl-1">.</span><span class="hl-8">setSession</span><span class="hl-1">(</span><br/><span class="hl-1">      </span><span class="hl-5">new</span><span class="hl-1"> </span><span class="hl-8">Session</span><span class="hl-1">({</span><br/><span class="hl-1">        </span><span class="hl-2">applicationId:</span><span class="hl-1"> </span><span class="hl-2">alexam</span><span class="hl-1">.</span><span class="hl-2">skillContext</span><span class="hl-1">.</span><span class="hl-2">applicationId</span><span class="hl-1">,</span><br/><span class="hl-1">        </span><span class="hl-2">attributes:</span><span class="hl-1"> { </span><span class="hl-2">count:</span><span class="hl-1"> </span><span class="hl-10">10</span><span class="hl-1"> },</span><br/><span class="hl-1">      }),</span><br/><span class="hl-1">    );</span><br/><span class="hl-1">    </span><span class="hl-5">const</span><span class="hl-1"> </span><span class="hl-6">countUpIntent</span><span class="hl-1"> = </span><span class="hl-2">alexam</span><span class="hl-1">.</span><span class="hl-2">requestFactory</span><span class="hl-1">.</span><span class="hl-8">intentRequest</span><span class="hl-1">(</span><span class="hl-3">&quot;CountUpIntent&quot;</span><span class="hl-1">);</span><br/><br/><span class="hl-1">    </span><span class="hl-5">const</span><span class="hl-1"> </span><span class="hl-6">resp</span><span class="hl-1"> = </span><span class="hl-0">await</span><span class="hl-1"> </span><span class="hl-2">alexam</span><span class="hl-1">.</span><span class="hl-8">send</span><span class="hl-1">(</span><span class="hl-2">countUpIntent</span><span class="hl-1">);</span><br/><span class="hl-1">    </span><span class="hl-8">expect</span><span class="hl-1">(</span><span class="hl-2">resp</span><span class="hl-1">.</span><span class="hl-2">sessionAttributes</span><span class="hl-1">?.</span><span class="hl-2">count</span><span class="hl-1">).</span><span class="hl-8">toBe</span><span class="hl-1">(</span><span class="hl-10">11</span><span class="hl-1">);</span><br/><span class="hl-1">  });</span><br/><span class="hl-1">});</span><br/><br/>
+</code></pre>
+
+<a href="#reference" id="reference" style="color: inherit; text-decoration: none;">
+  <h2>Reference</h2>
+</a>
+
+<a href="#alexambuilder" id="alexambuilder" style="color: inherit; text-decoration: none;">
+  <h3>AlexamBuilder</h3>
+</a>
+<p>Builder for alexam.</p>
+
+<a href="#setskillcontextskillcontext-skillcontext" id="setskillcontextskillcontext-skillcontext" style="color: inherit; text-decoration: none;">
+  <h4><code>setSkillContext(skillContext: SkillContext)</code></h4>
+</a>
+<p>Set your cumstom <code>SkillContext</code> object to <code>AlexamBuilder</code>. You would want to use it if you need to customize session or context property of mock request.</p>
+
+<a href="#sethandlerhandler-handler" id="sethandlerhandler-handler" style="color: inherit; text-decoration: none;">
+  <h4><code>setHandler(handler: Handler)</code></h4>
+</a>
+<p>Set Handler object you want to send mock request. alexam would throw error if build without handler.</p>
+
+<a href="#build-alexam" id="build-alexam" style="color: inherit; text-decoration: none;">
+  <h4><code>build(): Alexam</code></h4>
+</a>
+<p>Build alexam object with set configurations.</p>
+
+<a href="#alexam-1" id="alexam-1" style="color: inherit; text-decoration: none;">
+  <h3>Alexam</h3>
+</a>
+<p>Interact to handler and manage session until session close.</p>
+
+<a href="#async-sendrequest-requestenvelope" id="async-sendrequest-requestenvelope" style="color: inherit; text-decoration: none;">
+  <h4><code>async send(request: RequestEnvelope)</code></h4>
+</a>
+<p>Send request to Handler you set. Would send <code>SessionEndedRequest</code> automatically if response includes <code>shouldEndSession: true</code>.</p>
+
+<a href="#resetsession" id="resetsession" style="color: inherit; text-decoration: none;">
+  <h4><code>resetSession()</code></h4>
+</a>
+<p>Reset session in SkillRequestFactory (= overwrite by new Session object).</p>
+
+<a href="#skillrequestfacotry" id="skillrequestfacotry" style="color: inherit; text-decoration: none;">
+  <h3>SkillRequestFacotry</h3>
+</a>
+<p>Builder for mock request object.</p>
+
+<a href="#launchrequest-requestenvelope" id="launchrequest-requestenvelope" style="color: inherit; text-decoration: none;">
+  <h4><code>launchRequest(): RequestEnvelope</code></h4>
+</a>
+<p>Build mock <code>LaunchRequest</code>.</p>
+
+<a href="#intentrequestintentname-string-slots--slotname-string-any--requestenvelope" id="intentrequestintentname-string-slots--slotname-string-any--requestenvelope" style="color: inherit; text-decoration: none;">
+  <h4><code>intentRequest(intentName: string, slots?: { [slotName: string]: any },): RequestEnvelope</code></h4>
+</a>
+<p>Build mock <code>IntentRequest</code>.</p>
+
+<a href="#aplusereventrequesttoken-eventarguments-source-components---token-string-eventarguments-any-source-any-components-any--requestenvelope" id="aplusereventrequesttoken-eventarguments-source-components---token-string-eventarguments-any-source-any-components-any--requestenvelope" style="color: inherit; text-decoration: none;">
+  <h4><code>aplUserEventRequest({token, eventArguments, source, components, }: { token?: string; eventArguments?: [any]; source?: any; components?: any; }): RequestEnvelope</code></h4>
+</a>
+<p>Build mock <code>Alexa.Presentation.APL.UserEvent</code>.</p>
+
+<a href="#connectionsresponse-name-payload-status-token---name-string-payload--key-string-any--status-interfacesconnectionsconnectionsstatus-token-string--requestenvelope" id="connectionsresponse-name-payload-status-token---name-string-payload--key-string-any--status-interfacesconnectionsconnectionsstatus-token-string--requestenvelope" style="color: inherit; text-decoration: none;">
+  <h4><code>connectionsResponse({ name, payload, status, token, }: { name?: string; payload?: { [key: string]: any }; status?: interfaces.connections.ConnectionsStatus; token?: string; }): RequestEnvelope</code></h4>
+</a>
+<p>Build mock <code>Connections.Response</code>.</p>
+
+<a href="#sessionendedrequestreason-string--quotuser_initiatedquot-error--type-string-message-string--requestenvelope" id="sessionendedrequestreason-string--quotuser_initiatedquot-error--type-string-message-string--requestenvelope" style="color: inherit; text-decoration: none;">
+  <h4><code>sessionEndedRequest(reason: string = &quot;USER_INITIATED&quot;, error?: { type: string; message: string },): RequestEnvelope</code></h4>
+</a>
+<p>Build mock <code>SessionEndedRequest</code>.</p>
+
+<a href="#withsession" id="withsession" style="color: inherit; text-decoration: none;">
+  <h4><code>withSession()</code></h4>
+</a>
+<p>Adds json object of <code>Session</code> to internal request object. You can take it by using <code>getRequest()</code>.
+Use this method if you want to build your own custom request like following.</p>
+<pre><code class="language-typescript"><span class="hl-5">const</span><span class="hl-1"> </span><span class="hl-6">mockRequest</span><span class="hl-1"> = </span><span class="hl-2">skillRequestFactory</span><br/><span class="hl-1">  .</span><span class="hl-8">withSession</span><span class="hl-1">()</span><br/><span class="hl-1">  .</span><span class="hl-8">withRequest</span><span class="hl-1">(</span><span class="hl-2">someRequestJson</span><span class="hl-1">)</span><br/><span class="hl-1">  .</span><span class="hl-8">getRequest</span><span class="hl-1">();</span>
+</code></pre>
+<p>If you want to customize <code>Session</code>, you should it throught <code>SkillContext</code> object.</p>
+<pre><code class="language-typescript"><span class="hl-2">skillRequestFactory</span><span class="hl-1">.</span><span class="hl-2">skillContext</span><span class="hl-1"> = </span><span class="hl-2">newSkillContext</span><span class="hl-1">;</span><br/><span class="hl-5">const</span><span class="hl-1"> </span><span class="hl-6">mockRequest</span><span class="hl-1"> = </span><span class="hl-2">skillRequestFactory</span><br/><span class="hl-1">  .</span><span class="hl-8">withSession</span><span class="hl-1">() </span><span class="hl-4">// &lt;- This includes session in newSkillContext</span><br/><span class="hl-1">  .</span><span class="hl-8">withRequest</span><span class="hl-1">(</span><span class="hl-2">someRequestJson</span><span class="hl-1">)</span><br/><span class="hl-1">  .</span><span class="hl-8">getRequest</span><span class="hl-1">();</span>
+</code></pre>
+
+<a href="#withrequestrequest-any" id="withrequestrequest-any" style="color: inherit; text-decoration: none;">
+  <h4><code>withRequest(request: any)</code></h4>
+</a>
+<p>Adds <code>request</code> to <code>request</code> property of internal request object. You can take it by using <code>getRequest()</code>.
+Use this method if you want to build your own custom request like following.</p>
+<pre><code class="language-typescript"><span class="hl-5">const</span><span class="hl-1"> </span><span class="hl-6">mockRequest</span><span class="hl-1"> = </span><span class="hl-2">skillRequestFactory</span><br/><span class="hl-1">  .</span><span class="hl-8">withRequest</span><span class="hl-1">(</span><span class="hl-2">someRequestJson</span><span class="hl-1">)</span><br/><span class="hl-1">  .</span><span class="hl-8">getRequest</span><span class="hl-1">();</span>
+</code></pre>
+
+<a href="#getrequest" id="getrequest" style="color: inherit; text-decoration: none;">
+  <h4><code>getRequest()</code></h4>
+</a>
+<p>Return internal request of <code>SkillRequestFactory</code>. It means you can take your custom object by using <code>withSession()</code> and <code>withRequest()</code> by this method.</p>
+
+<a href="#skillcontext" id="skillcontext" style="color: inherit; text-decoration: none;">
+  <h3>SkillContext</h3>
+</a>
+<p>Manage <code>Session</code>, <code>Context</code> and both related objects.</p>
+
+<a href="#setsessionsession-session" id="setsessionsession-session" style="color: inherit; text-decoration: none;">
+  <h4>setSession(session: Session)</h4>
+</a>
+<p>Set new <code>Session</code> object.</p>
+
+<a href="#setcontextcontext-context" id="setcontextcontext-context" style="color: inherit; text-decoration: none;">
+  <h4>setContext(context: Context)</h4>
+</a>
+<p>Set new <code>Context</code> object.</p>
+
+<a href="#setdisplayviewport-interfacesviewportviewportstate--" id="setdisplayviewport-interfacesviewportviewportstate--" style="color: inherit; text-decoration: none;">
+  <h4>setDisplay(viewport: interfaces.viewport.ViewportState = {})</h4>
+</a>
+<p>Utility method for setting display information to <code>Context</code> object.
+This sets <code>Alexa.Presentation.APL</code> as supported interface and <code>viewport</code> to viewport in <code>Context</code>.</p>
+
+<a href="#user" id="user" style="color: inherit; text-decoration: none;">
+  <h3>User</h3>
+</a>
+
+<a href="#linkaccount" id="linkaccount" style="color: inherit; text-decoration: none;">
+  <h4><code>linkAccount()</code></h4>
+</a>
+<p>Sets randomized value to <code>accessToken</code>. It is useful when you want to simulate request from account linked user.</p>
+<pre><code class="language-typescript"><span class="hl-5">const</span><span class="hl-1"> </span><span class="hl-6">user</span><span class="hl-1"> = </span><span class="hl-5">new</span><span class="hl-1"> </span><span class="hl-8">User</span><span class="hl-1">();</span><br/><span class="hl-2">user</span><span class="hl-1">.</span><span class="hl-8">linkAccount</span><span class="hl-1">();</span><br/><br/><span class="hl-5">const</span><span class="hl-1"> </span><span class="hl-6">skillContext</span><span class="hl-1"> = </span><span class="hl-5">new</span><span class="hl-1"> </span><span class="hl-8">SkillContext</span><span class="hl-1">();</span><br/><span class="hl-2">skillContext</span><span class="hl-1">.</span><span class="hl-8">setContext</span><span class="hl-1">(</span><span class="hl-5">new</span><span class="hl-1"> </span><span class="hl-8">Context</span><span class="hl-1">({ </span><span class="hl-2">user</span><span class="hl-1"> }));</span><br/><br/><span class="hl-5">const</span><span class="hl-1"> </span><span class="hl-6">alexam</span><span class="hl-1">: </span><span class="hl-7">Alexam</span><span class="hl-1"> = </span><span class="hl-5">new</span><span class="hl-1"> </span><span class="hl-8">AlexamBuilder</span><span class="hl-1">()</span><br/><span class="hl-1">  .</span><span class="hl-8">setHandler</span><span class="hl-1">(</span><span class="hl-2">handlerObj</span><span class="hl-1">)</span><br/><span class="hl-1">  .</span><span class="hl-8">setSkillContext</span><span class="hl-1">(</span><span class="hl-2">skillContext</span><span class="hl-1">)</span><br/><span class="hl-1">  .</span><span class="hl-8">build</span><span class="hl-1">();</span>
+</code></pre>
+
+<a href="#anything-else" id="anything-else" style="color: inherit; text-decoration: none;">
+  <h2>Anything else</h2>
+</a>
+
+<a href="#doesn39t-support-remote-debugging" id="doesn39t-support-remote-debugging" style="color: inherit; text-decoration: none;">
+  <h3>Doesn&#39;t support remote debugging</h3>
+</a>
+<p>virtual-alexa supports remote debugging but alexam doesn&#39;t.
+I recommend you to debug actual code by using <a href="https://developer.amazon.com/en-US/docs/alexa/smapi/quick-start-alexa-skills-kit-command-line-interface.html">ask-cli</a> or simulator on ask developer console.
+alexam is for testing or debugging local code while implementing.</p>
+
+<a href="#doesn39t-support-test-by-actual-utterance-for-now" id="doesn39t-support-test-by-actual-utterance-for-now" style="color: inherit; text-decoration: none;">
+  <h3>Doesn&#39;t support test by actual utterance (for now)</h3>
+</a>
+<p><a href="https://github.com/bespoken/virtual-alexa">virtual-alexa</a> supports <code>utter</code> command which can test by actual utterance.
+It sounds some benefits but doesn&#39;t support alexam (for now) because</p>
+<ul>
+<li>Complecate for multilingual skill</li>
+</ul>
+<p>If your alexa skill would be multilingual, what language will you choose for actual test?
+If you think it&#39;s important to check whether work correctly by actual utterance, will you prepare whole supporting language for each test case?
+It sounds complecate for me. Sometimes it would be noisy for designing test suite.
+You would think test case with actual utterance would be easy to understand the purpose of the case, but I think it would be same if intent name is proper. </p>
+<ul>
+<li>Fail test unexpectedly if sample utterance is modified</li>
+</ul>
+<p>If using actual utterance, you should run whole tests if just modifing sample utterances because some test cases includes utterance you removed.
+I think those kind of tests are basically for checking logics, shouldn&#39;t check detail interfaces. At least, alexam is designed for it.</p>
+<p>btw, actually I agree with important to test by actual utterance. But I want you to use <a href="https://developer.amazon.com/en-US/docs/alexa/smapi/ask-cli-command-reference.html#dialog-command">dialog</a> command of ask-cli. It is similar as actual environment, you can also use built-in intetns and slots. I just mean alexam isn&#39;t suitable for it.</p>
+</div></div><div class="col-4 col-menu menu-sticky-wrap menu-highlight"><nav class="tsd-navigation primary"><ul><li class="current"><a href="modules.html">Exports</a></li></ul></nav><nav class="tsd-navigation secondary menu-sticky"><ul><li class="tsd-kind-class"><a href="classes/Alexam.html" class="tsd-kind-icon">Alexam</a></li><li class="tsd-kind-class"><a href="classes/AlexamBuilder.html" class="tsd-kind-icon">Alexam<wbr/>Builder</a></li><li class="tsd-kind-class"><a href="classes/BaseHandler.html" class="tsd-kind-icon">Base<wbr/>Handler</a></li><li class="tsd-kind-class"><a href="classes/Context.html" class="tsd-kind-icon">Context</a></li><li class="tsd-kind-class"><a href="classes/LambdaHandler.html" class="tsd-kind-icon">Lambda<wbr/>Handler</a></li><li class="tsd-kind-class"><a href="classes/Session.html" class="tsd-kind-icon">Session</a></li><li class="tsd-kind-class"><a href="classes/SkillContext.html" class="tsd-kind-icon">Skill<wbr/>Context</a></li><li class="tsd-kind-class"><a href="classes/SkillRequestFactory.html" class="tsd-kind-icon">Skill<wbr/>Request<wbr/>Factory</a></li><li class="tsd-kind-class"><a href="classes/User.html" class="tsd-kind-icon">User</a></li></ul></nav></div></div></div><footer class="with-border-bottom"><div class="container"><h2>Legend</h2><div class="tsd-legend-group"><ul class="tsd-legend"><li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li><li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li><li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li><li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li></ul></div><h2>Settings</h2><p>Theme <select id="theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></p></div></footer><div class="container tsd-generator"><p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div><div class="overlay"></div><script src="assets/main.js"></script></body></html>

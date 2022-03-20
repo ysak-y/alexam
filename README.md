@@ -174,6 +174,8 @@ describe("Multiple test cases with one alexam object for demonstrating resetSess
 
 ## Reference
 
+I'm preparing [document](./docs) also.
+
 ### AlexamBuilder
 
 Builder for alexam.
