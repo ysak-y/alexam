@@ -3,6 +3,10 @@ import * as uuid from "uuid";
 import { Device } from "./Device";
 import { User } from "./User";
 
+/**
+ * Data class that represents context property of the request
+ * See https://developer.amazon.com/en-US/docs/alexa/custom-skills/request-and-response-json-reference.html#context-object
+ */
 export class Context {
   apiAccessToken: string = uuid.v4();
   apiEndpoint: string = "https://api.amazonalexa.com";
@@ -24,6 +28,9 @@ export class Context {
     this.user = user ? user : new User();
   }
 
+  /**
+   * @internal
+   */
   toJson() {
     const json: any = {
       System: {

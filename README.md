@@ -61,8 +61,7 @@ const LaunchRequestHandler: RequestHandler = {
 const handler = SkillBuilders.custom()
   .addRequestHandlers(LaunchRequestHandler)
   .lambda();
-
-// Configure alexam
+Configure alexam
 const alexam = new AlexamBuilder()
   .setHandler(new LambdaHandler(handler))
   .build();
@@ -174,132 +173,7 @@ describe("Multiple test cases with one alexam object for demonstrating resetSess
 
 ## Reference
 
-I'm preparing [document](https://ysak-y.github.io/alexam-document) also.
-
-### AlexamBuilder
-
-Builder for alexam.
-
-#### `setSkillContext(skillContext: SkillContext)`
-
-Set your cumstom `SkillContext` object to `AlexamBuilder`. You would want to use it if you need to customize session or context property of mock request.
-
-#### `setHandler(handler: Handler)`
-
-Set Handler object you want to send mock request. alexam would throw error if build without handler.
-
-#### `build(): Alexam`
-
-Build alexam object with set configurations.
-
-### Alexam
-
-Interact to handler and manage session until session close.
-
-#### `async send(request: RequestEnvelope)`
-
-Send request to Handler you set. Would send `SessionEndedRequest` automatically if response includes `shouldEndSession: true`.
-
-#### `resetSession()`
-
-Reset session in SkillRequestFactory (= overwrite by new Session object).
-
-### SkillRequestFacotry
-
-Builder for mock request object.
-
-#### `launchRequest(): RequestEnvelope`
-
-Build mock `LaunchRequest`.
-
-#### `intentRequest(intentName: string, slots?: { [slotName: string]: any },): RequestEnvelope`
-
-Build mock `IntentRequest`.
-
-#### `aplUserEventRequest({token, eventArguments, source, components, }: { token?: string; eventArguments?: [any]; source?: any; components?: any; }): RequestEnvelope`
-
-Build mock `Alexa.Presentation.APL.UserEvent`.
-
-#### `connectionsResponse({ name, payload, status, token, }: { name?: string; payload?: { [key: string]: any }; status?: interfaces.connections.ConnectionsStatus; token?: string; }): RequestEnvelope`
-
-Build mock `Connections.Response`.
-
-#### `sessionEndedRequest(reason: string = "USER_INITIATED", error?: { type: string; message: string },): RequestEnvelope`
-
-Build mock `SessionEndedRequest`.
-
-#### `withSession()`
-
-Adds json object of `Session` to internal request object. You can take it by using `getRequest()`.
-Use this method if you want to build your own custom request like following.
-
-```typescript
-const mockRequest = skillRequestFactory
-  .withSession()
-  .withRequest(someRequestJson)
-  .getRequest();
-```
-
-If you want to customize `Session`, you should it throught `SkillContext` object.
-
-```typescript
-skillRequestFactory.skillContext = newSkillContext;
-const mockRequest = skillRequestFactory
-  .withSession() // <- This includes session in newSkillContext
-  .withRequest(someRequestJson)
-  .getRequest();
-```
-
-#### `withRequest(request: any)`
-
-Adds `request` to `request` property of internal request object. You can take it by using `getRequest()`.
-Use this method if you want to build your own custom request like following.
-
-```typescript
-const mockRequest = skillRequestFactory
-  .withRequest(someRequestJson)
-  .getRequest();
-```
-
-#### `getRequest()`
-
-Return internal request of `SkillRequestFactory`. It means you can take your custom object by using `withSession()` and `withRequest()` by this method.
-
-### SkillContext
-
-Manage `Session`, `Context` and both related objects.
-
-#### setSession(session: Session)
-
-Set new `Session` object.
-
-#### setContext(context: Context)
-
-Set new `Context` object.
-
-#### setDisplay(viewport: interfaces.viewport.ViewportState = {})
-
-Utility method for setting display information to `Context` object.
-This sets `Alexa.Presentation.APL` as supported interface and `viewport` to viewport in `Context`.
-
-### User
-
-#### `linkAccount()`
-
-Sets randomized value to `accessToken`. It is useful when you want to simulate request from account linked user.
-
-```typescript
-const user = new User();
-user.linkAccount();
-
-const skillContext = new SkillContext();
-skillContext.setContext(new Context({ user }));
-
-const alexam: Alexam = new AlexamBuilder()
-  .setHandler(handlerObj)
-  .setSkillContext(skillContext)
-  .build();
-```
+See [API doc](https://ysak-y.github.io/alexam-document).
 
 ## Anything else
 
