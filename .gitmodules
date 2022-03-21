@@ -1,0 +1,3 @@
+[submodule "docs"]
+	path = docs
+	url = https://github.com/ysak-y/alexam-document.git
