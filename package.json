@@ -16,7 +16,7 @@
   "scripts": {
     "build": "tsc",
     "test": "jest",
-    "docs": "npx typedoc --excludeInternal --out docs/dist src"
+    "docs": "npx typedoc --excludeInternal --out docs/docs src"
   },
   "devDependencies": {
     "@babel/core": "^7.16.5",
